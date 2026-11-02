@@ -1,0 +1,26 @@
+version: '3'
+
+tasks:
+  default:
+    desc: 게임 실행
+    cmds:
+      - task: run
+
+  run:
+    desc: 게임 실행
+    cmds:
+      - godot --path .
+
+  test:
+    desc: 자동 테스트 (운하를 파고 배 스폰 확인, shots/에 캡처)
+    cmds:
+      - mkdir -p shots
+      - godot --path . -- --autotest
+
+  record:
+    desc: 자동 테스트 장면을 shots/take.mp4로 녹화
+    cmds:
+      - mkdir -p shots
+      - godot --path . --write-movie shots/take.avi -- --autotest
+      - ffmpeg -y -loglevel error -i shots/take.avi -c:v libx264 -pix_fmt yuv420p -crf 23 shots/take.mp4
+      - rm shots/take.avi
